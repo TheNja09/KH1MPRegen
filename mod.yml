@@ -1,0 +1,7 @@
+title: KH1 MP Regen
+description: This mod replicates the "damage dealt restores MP" mechanic from KH1 into KH2. Note this only works on one enemy at a time. Proof of Concept mod for now, may look into a better way of allowing AoE damage to work at a later date.
+assets:
+- name: scripts/regen.lua
+  method: copy
+  source:
+  - name: regen.lua
