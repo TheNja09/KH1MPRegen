@@ -1,4 +1,5 @@
 UA = 0
+_BadAnimations = {56, 59, 62, 65, 68, 71, 58, 61, 64, 67, 70, 73, 212, 221, 222, 223, 224, 225, 226, 227, 241, 242, 243, 244, 245, 246, 247, 248, 232, 233, 4}
 function _OnFrame()
     World = ReadByte(Now + 0x00)
     Room = ReadByte(Now + 0x01)
@@ -35,17 +36,29 @@ function Events(M,B,E) --Check for Map, Btl, and Evt
 end
 
 function Cheats()
+local _CurrAnimPointer = ReadShort(ReadLong(0x00AD4218-0x56454E) + 0x180, true)
+local _FoundArrayAnim
 local RVCurrent = ReadFloat(ReadLong(0x56FD2A) + 0xD48, true)
 local RVMax = ReadFloat(ReadLong(0x56FD2A) + 0xD4C, true)
+	for i = 1, 30 do
+        if _CurrAnimPointer ~= _BadAnimations[i] then
+        _FoundArrayAnim = false
+        end
+    end
+    for i = 1, 30 do 
+        if _CurrAnimPointer == _BadAnimations[i] then
+        _FoundArrayAnim = true
+        end
+    end
 	if ReadByte(Slot1+0x180) > ReadByte(Slot1+0x184) then
 	WriteByte(Slot1+0x180, ReadByte(Slot1+0x184))
 	end
-	if RVCurrent > UA and RVCurrent > 0 then
+	if RVCurrent > UA and RVCurrent > 0 and _FoundArrayAnim == false then
 		if ReadByte(Slot1+0x180) < ReadByte(Slot1+0x184) then
 		WriteByte(Slot1+0x180, ReadByte(Slot1+0x180) + (RVCurrent - UA) / 4)
 		end
 	UA = RVCurrent
-	elseif RVCurrent == 0 then
+	elseif RVCurrent == 0 and _FoundArrayAnim == false then
 	UA = 0
 	end
 end
